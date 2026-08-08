@@ -1,0 +1,12 @@
+bundle:
+  name: customer-churn-project
+
+include:
+  - resources/*.yml
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://dbc-2a148dfb-9923.cloud.databricks.com
