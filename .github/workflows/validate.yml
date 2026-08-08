@@ -8,9 +8,6 @@ on:
 jobs:
   test-and-validate:
     runs-on: ubuntu-latest
-    env:
-      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
 
     steps:
       - name: Check out repository
@@ -21,8 +18,16 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Check secret length (debug only)
+        env:
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: echo "Token length is ${#DATABRICKS_TOKEN}"
+
       - name: Install Databricks CLI
         uses: databricks/setup-cli@main
 
       - name: Validate Databricks bundle
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: databricks bundle validate -t dev
