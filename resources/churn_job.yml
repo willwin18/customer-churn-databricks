@@ -1,0 +1,33 @@
+resources:
+  jobs:
+    churn_pipeline:
+      name: customer-churn-pipeline-bundle
+
+      tasks:
+        - task_key: ingest_transactions
+          notebook_task:
+            notebook_path: /Workspace/Users/raja.asrd1@gmail.com/job_notebooks/01_ingest_transactions
+
+        - task_key: build_features
+          depends_on:
+            - task_key: ingest_transactions
+          notebook_task:
+            notebook_path: /Workspace/Users/raja.asrd1@gmail.com/job_notebooks/02_build_features
+
+        - task_key: train_model
+          depends_on:
+            - task_key: build_features
+          notebook_task:
+            notebook_path: /Workspace/Users/raja.asrd1@gmail.com/job_notebooks/03_train_model
+
+        - task_key: score_customers
+          depends_on:
+            - task_key: train_model
+          notebook_task:
+            notebook_path: /Workspace/Users/raja.asrd1@gmail.com/job_notebooks/04_score_customers
+
+        - task_key: publish_powerbi_table
+          depends_on:
+            - task_key: score_customers
+          notebook_task:
+            notebook_path: /Workspace/Users/raja.asrd1@gmail.com/job_notebooks/05_publish_powerbi_table
